@@ -4,7 +4,8 @@
 #
 
 version: 2.1
-
+orbs: # specify all orbs you want to use.
+  aws-code-deploy: circleci/aws-code-deploy@1.0.0
 workflows:
   version: 2.1
   build-workflow:
@@ -13,6 +14,13 @@ workflows:
           filters:
             branches:
               only: master
+      - aws-code-deploy/deploy:
+          application-name: cy235-cicd # The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.
+          deployment-group: cy235-cicd-stage # The name of a new deployment group for the specified application.
+          service-role-arn: arn:aws:iam::110693898349:role/CodeDeployServiceRole # The service role for a deployment group.
+          bundle-bucket: cf-templates-ocv3us2up4lp-us-east-1 # The s3 bucket where an application revision will be stored.
+          bundle-key: 2020029YDq-CloudFormation-CircleCI-CodeDeploy-fontesj.template # A key under the s3 bucket where an application revision will be stored.
+
 #       - deploy:
 #           requires:
 #             - build
