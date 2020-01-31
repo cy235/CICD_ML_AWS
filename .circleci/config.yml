@@ -90,21 +90,21 @@ jobs:
           name: "Set AWS region"
           command: ~/.local/bin/aws configure set region us-east-1
       - run:
-          name: "Deploy to S3"
+          name: Deploy to S3
           command: |
-      #      if [ "${CIRCLE_BRANCH}" == "qa" ]; then
-       #         ~/.local/bin/aws s3 sync /home/circleci/app/ s3://app/qa --delete
-        #    elif [ "${CIRCLE_BRANCH}" == "master" ]; then
+           if [ "${CIRCLE_BRANCH}" == "qa" ]; then
+               ~/.local/bin/aws s3 sync /home/circleci/app/ s3://app/qa --delete
+           elif [ "${CIRCLE_BRANCH}" == "master" ]; then
                 ~/.local/bin/aws s3 sync /home/circleci/app/ s3://app/master --delete
-         #   fi
+           fi
       - run:
-          name: "AWS codedeploy"
+          name: AWS codedeploy
           command: |
-          #  if [ "${CIRCLE_BRANCH}" == "qa" ]; then
-           #     ~/.local/bin/aws deploy create-deployment --application-name app-qa --deployment-group-name app-group-qa --file-exists-behavior OVERWRITE --github-location repository="TaikerLiang/APP",commitId="$CIRCLE_SHA1"
-            #elif [ "${CIRCLE_BRANCH}" == "master" ]; then
+           if [ "${CIRCLE_BRANCH}" == "qa" ]; then
+               ~/.local/bin/aws deploy create-deployment --application-name app-qa --deployment-group-name app-group-qa --file-exists-behavior OVERWRITE --github-location repository="TaikerLiang/APP",commitId="$CIRCLE_SHA1"
+           elif [ "${CIRCLE_BRANCH}" == "master" ]; then
                 ~/.local/bin/aws deploy create-deployment --application-name CD-app --deployment-group-name CD-group --file-exists-behavior OVERWRITE --github-location repository="cy235/CICD_ML_AWS",commitId="$CIRCLE_SHA1"
-            #fi
+           fi
    
    
    
