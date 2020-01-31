@@ -90,7 +90,7 @@ jobs:
           name: "Set AWS region"
           command: ~/.local/bin/aws configure set region us-east-1
       - run:
-          name: Deploy to S3
+          name: "Deploy to S3"
           command: |
       #      if [ "${CIRCLE_BRANCH}" == "qa" ]; then
        #         ~/.local/bin/aws s3 sync /home/circleci/app/ s3://app/qa --delete
@@ -98,7 +98,7 @@ jobs:
                 ~/.local/bin/aws s3 sync /home/circleci/app/ s3://app/master --delete
          #   fi
       - run:
-          name: AWS codedeploy
+          name: "AWS codedeploy"
           command: |
           #  if [ "${CIRCLE_BRANCH}" == "qa" ]; then
            #     ~/.local/bin/aws deploy create-deployment --application-name app-qa --deployment-group-name app-group-qa --file-exists-behavior OVERWRITE --github-location repository="TaikerLiang/APP",commitId="$CIRCLE_SHA1"
