@@ -90,14 +90,14 @@ jobs:
       
       
                 
-      - run:
-          name: run lint
-          command: |
-            make lint
-      - run:
-          name: run test
-          command: |
-            make test
+#       - run:
+#           name: run lint
+#           command: |
+#             make lint
+#       - run:
+#           name: run test
+#           command: |
+#             make test
       
       
       
