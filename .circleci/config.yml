@@ -3,19 +3,24 @@
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
 
-version: 2
+version: 2.1 # We must use 2.1 to make use of orbs.
+orbs: # specify all orbs you want to use.
+  aws-code-deploy: circleci/aws-code-deploy@1.0.0
 
 workflows:
-  version: 2
+  version: 2.1
   build-deploy-workflow:
     jobs:
       - build
       - deploy:
           requires:
             - build
-          filters:
-            branches:
-              only: master
+      - deploy_application:
+          requires:
+            -deploy
+#           filters:
+#             branches:
+#               only: master
 #                 - master, qa
 
 
@@ -112,6 +117,40 @@ jobs:
            elif [ "${CIRCLE_BRANCH}" == "master" ]; then
                 ~/.local/bin/aws s3 sync /home/circleci/app s3://cy235-cicd-bucket/app --delete
            fi
+           
+  deploy_application:
+    jobs:
+      - aws-code-deploy/deploy:
+          application-name: myApplication # The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.
+          deployment-group: myDeploymentGroup # The name of a new deployment group for the specified application.
+          service-role-arn: myDeploymentGroupRoleARN # The service role for a deployment group.
+          bundle-bucket: myApplicationS3Bucket # The s3 bucket where an application revision will be stored.
+          bundle-key: myS3BucketKey # A key under the s3 bucket where an application revision will be stored.           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
 #       - run:
 #           name: AWS codedeploy
 #           command: |
