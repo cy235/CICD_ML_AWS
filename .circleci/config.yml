@@ -10,9 +10,9 @@ workflows:
   build-deploy-workflow:
     jobs:
       - build
-      - deploy:
-          requires:
-            - build
+#       - deploy:
+#           requires:
+#             - build
           filters:
             branches:
               only: 
@@ -64,62 +64,62 @@ jobs:
           command: |
             make test
 
-  deploy:
-    working_directory: ~/app
-    docker:
-      - image: circleci/python:3.7.3-stretch
-    steps:
-      - checkout
-      - restore_cache:
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
+#   deploy:
+#     working_directory: ~/app
+#     docker:
+#       - image: circleci/python:3.7.3-stretch
+#     steps:
+#       - checkout
+#       - restore_cache:
+#           key: v1-dependencies-{{ checksum "requirements.txt" }}
+# #       - run:
+# #           name: Show current branch
+# #           command: echo ${CIRCLE_BRANCH}
 #       - run:
-#           name: Show current branch
-#           command: echo ${CIRCLE_BRANCH}
-      - run:
-          name: Show git commit id
-          command: echo ${CIRCLE_SHA1}
-      - run: sudo apt-get update
-      - run: sudo apt-get install python3-pip
-#       - run: sudo apt-get install groff
-      - run: sudo pip3 install --upgrade pip
-      - run:
-          name: Install aws cli
-          command: pip3 install awscli --upgrade --user
-      - run: ~/.local/bin/aws --version
-      - run: chmod +x ~/.local/bin/aws
+#           name: Show git commit id
+#           command: echo ${CIRCLE_SHA1}
+#       - run: sudo apt-get update
+#       - run: sudo apt-get install python3-pip
+# #       - run: sudo apt-get install groff
+#       - run: sudo pip3 install --upgrade pip
+#       - run:
+#           name: Install aws cli
+#           command: pip3 install awscli --upgrade --user
+#       - run: ~/.local/bin/aws --version
+#       - run: chmod +x ~/.local/bin/aws
       
       
                 
-#       - run:
-#           name: run lint
-#           command: |
-#             make lint
-#       - run:
-#           name: run test
-#           command: |
-#             make test
+# #       - run:
+# #           name: run lint
+# #           command: |
+# #             make lint
+# #       - run:
+# #           name: run test
+# #           command: |
+# #             make test
       
       
       
-      - run:
-          name: "Set AWS region"
-          command: ~/.local/bin/aws configure set region us-east-1   
-      - run:
-          name: Deploy to S3
-          command: |
-           if [ "${CIRCLE_BRANCH}" == "qa" ]; then
-               ~/.local/bin/aws s3 sync /home/circleci/app/ s3://app/qa --delete
-           elif [ "${CIRCLE_BRANCH}" == "master" ]; then
-                ~/.local/bin/aws s3 sync /home/circleci/app/ s3://app/master --delete
-           fi
 #       - run:
-#           name: AWS codedeploy
+#           name: "Set AWS region"
+#           command: ~/.local/bin/aws configure set region us-east-1   
+#       - run:
+#           name: Deploy to S3
 #           command: |
 #            if [ "${CIRCLE_BRANCH}" == "qa" ]; then
-#                ~/.local/bin/aws deploy create-deployment --application-name app-qa --deployment-group-name app-group-qa --file-exists-behavior OVERWRITE --github-location repository="TaikerLiang/APP",commitId="$CIRCLE_SHA1"
+#                ~/.local/bin/aws s3 sync /home/circleci/app/ s3://app/qa --delete
 #            elif [ "${CIRCLE_BRANCH}" == "master" ]; then
-#                 ~/.local/bin/aws deploy create-deployment --application-name CD-app --deployment-group-name CD-group --file-exists-behavior OVERWRITE --github-location repository="cy235/CICD_ML_AWS",commitId="$CIRCLE_SHA1"
+#                 ~/.local/bin/aws s3 sync /home/circleci/app/ s3://app/master --delete
 #            fi
+# #       - run:
+# #           name: AWS codedeploy
+# #           command: |
+# #            if [ "${CIRCLE_BRANCH}" == "qa" ]; then
+# #                ~/.local/bin/aws deploy create-deployment --application-name app-qa --deployment-group-name app-group-qa --file-exists-behavior OVERWRITE --github-location repository="TaikerLiang/APP",commitId="$CIRCLE_SHA1"
+# #            elif [ "${CIRCLE_BRANCH}" == "master" ]; then
+# #                 ~/.local/bin/aws deploy create-deployment --application-name CD-app --deployment-group-name CD-group --file-exists-behavior OVERWRITE --github-location repository="cy235/CICD_ML_AWS",commitId="$CIRCLE_SHA1"
+# #            fi
    
    
    
