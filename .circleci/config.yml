@@ -87,9 +87,23 @@ jobs:
           command: pip3 install awscli --upgrade --user
       - run: ~/.local/bin/aws --version
       - run: chmod +x ~/.local/bin/aws
+      
+      
+                
+      - run:
+          name: run lint
+          command: |
+            make lint
+      - run:
+          name: run test
+          command: |
+            make test
+      
+      
+      
       - run:
           name: "Set AWS region"
-          command: ~/.local/bin/aws configure set region us-east-1
+          command: ~/.local/bin/aws configure set region us-east-1   
       - run:
           name: Deploy to S3
           command: |
