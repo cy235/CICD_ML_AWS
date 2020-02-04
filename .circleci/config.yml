@@ -18,11 +18,11 @@ workflows:
             - aws-code-deploy/deploy:
               requires:
                 - deliver:
-                application-name: cy235-cicd-app # The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.
-                deployment-group: cy235-cicd-app-group # The name of a new deployment group for the specified application.
-                service-role-arn: arn:aws:iam::110693898349:role/CodeDeployServiceRole # The service role for a deployment group.
-                bundle-bucket: cy235-cicd-bucket # The s3 bucket where an application revision will be stored.
-                bundle-key: app # 
+#                 application-name: cy235-cicd-app # The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.
+#                 deployment-group: cy235-cicd-app-group # The name of a new deployment group for the specified application.
+#                 service-role-arn: arn:aws:iam::110693898349:role/CodeDeployServiceRole # The service role for a deployment group.
+#                 bundle-bucket: cy235-cicd-bucket # The s3 bucket where an application revision will be stored.
+#                 bundle-key: app # 
             
 #       - deploy_application:
 #           requires:
@@ -141,14 +141,14 @@ jobs:
                 ~/.local/bin/aws s3 sync /home/circleci/app s3://cy235-cicd-bucket/app --delete
            fi
            
-#   deploy_application:
-#     # jobs:
-#       - aws-code-deploy/deploy:
-#           application-name: cy235-cicd-app # The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.
-#           deployment-group: cy235-cicd-app-group # The name of a new deployment group for the specified application.
-#           service-role-arn: arn:aws:iam::110693898349:role/CodeDeployServiceRole # The service role for a deployment group.
-#           bundle-bucket: cy235-cicd-bucket # The s3 bucket where an application revision will be stored.
-#           bundle-key: app # A key under the s3 bucket where an application revision will be stored.           
+  aws-code-deploy/deploy:
+    # jobs:
+    - aws-code-deploy/deploy:
+        application-name: cy235-cicd-app # The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.
+        deployment-group: cy235-cicd-app-group # The name of a new deployment group for the specified application.
+        service-role-arn: arn:aws:iam::110693898349:role/CodeDeployServiceRole # The service role for a deployment group.
+        bundle-bucket: cy235-cicd-bucket # The s3 bucket where an application revision will be stored.
+        bundle-key: app # A key under the s3 bucket where an application revision will be stored.           
            
            
            
