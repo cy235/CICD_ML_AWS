@@ -4,8 +4,8 @@
 #
 
 version: 2.1 # We must use 2.1 to make use of orbs.
-orbs: # specify all orbs you want to use.
-  aws-code-deploy: circleci/aws-code-deploy@1.0.0
+# orbs: # specify all orbs you want to use.
+#   aws-code-deploy: circleci/aws-code-deploy@1.0.0
 
 workflows:
   version: 2.1
@@ -23,6 +23,20 @@ workflows:
 # #               only: master
 # #                 - master, qa
 
+
+
+orbs:
+  aws-code-deploy: circleci/aws-code-deploy@x.y
+version: 2.1
+workflows:
+  deploy_application:
+    jobs:
+      - aws-code-deploy/deploy:
+          application-name: cy235-cicd-app # The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.
+          deployment-group: cy235-cicd-app-group # The name of a new deployment group for the specified application.
+          service-role-arn: arn:aws:iam::110693898349:role/CodeDeployServiceRole # The service role for a deployment group.
+          bundle-bucket: cy235-cicd-bucket # The s3 bucket where an application revision will be stored.
+          bundle-key: app # A key under the s3 bucket where an application revision will be stored.   
 
 jobs:
 
@@ -120,12 +134,12 @@ jobs:
            
 #   deploy_application:
 #     # jobs:
-      - aws-code-deploy/deploy:
-          application-name: cy235-cicd-app # The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.
-          deployment-group: cy235-cicd-app-group # The name of a new deployment group for the specified application.
-          service-role-arn: arn:aws:iam::110693898349:role/CodeDeployServiceRole # The service role for a deployment group.
-          bundle-bucket: cy235-cicd-bucket # The s3 bucket where an application revision will be stored.
-          bundle-key: app # A key under the s3 bucket where an application revision will be stored.           
+#       - aws-code-deploy/deploy:
+#           application-name: cy235-cicd-app # The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.
+#           deployment-group: cy235-cicd-app-group # The name of a new deployment group for the specified application.
+#           service-role-arn: arn:aws:iam::110693898349:role/CodeDeployServiceRole # The service role for a deployment group.
+#           bundle-bucket: cy235-cicd-bucket # The s3 bucket where an application revision will be stored.
+#           bundle-key: app # A key under the s3 bucket where an application revision will be stored.           
            
            
            
