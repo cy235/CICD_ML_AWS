@@ -4,335 +4,335 @@
 #
 
 
-# orbs:
-#   aws-code-deploy: circleci/aws-code-deploy@1.0.0
-# version: 2.1
-# workflows:
-#   deploy_application:
-#     jobs:
-#       - aws-code-deploy/deploy:
-#           application-name: cy235-cicd-app # The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.
-#           deployment-group: cy235-cicd-app-group # The name of a new deployment group for the specified application.
-#           service-role-arn: arn:aws:iam::110693898349:role/CodeDeployServiceRole # The service role for a deployment group.
-#           bundle-bucket: cy235-cicd-bucket # The s3 bucket where an application revision will be stored.
-#           bundle-key: app # A key under the s3 bucket where an application revision will be stored. 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-orbs: # specify all orbs you want to use.
+orbs:
   aws-code-deploy: circleci/aws-code-deploy@1.0.0
-version: 2.1 # We must use 2.1 to make use of orbs.
+version: 2.1
 workflows:
-#   version: 2.1
-  build-deploy-workflow:
+  deploy_application:
     jobs:
-      - build
-      - deliver:
-          requires:
-            - build
-#             - deploy_application:
-#               requires:
-#                 - deliver:
-#                 application-name: cy235-cicd-app # The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.
-#                 deployment-group: cy235-cicd-app-group # The name of a new deployment group for the specified application.
-#                 service-role-arn: arn:aws:iam::110693898349:role/CodeDeployServiceRole # The service role for a deployment group.
-#                 bundle-bucket: cy235-cicd-bucket # The s3 bucket where an application revision will be stored.
-#                 bundle-key: app # 
-            
-#       - deploy_application:
-#           requires:
-#             - deliver
-# #           filters:
-# #             branches:
-# #               only: master
-# #                 - master, qa
+      - aws-code-deploy/deploy:
+          application-name: cy235-cicd-app # The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.
+          deployment-group: cy235-cicd-app-group # The name of a new deployment group for the specified application.
+          service-role-arn: arn:aws:iam::110693898349:role/CodeDeployServiceRole # The service role for a deployment group.
+          bundle-bucket: cy235-cicd-bucket # The s3 bucket where an application revision will be stored.
+          bundle-key: app # A key under the s3 bucket where an application revision will be stored. 
 
 
 
-# orbs:
-#   aws-code-deploy: circleci/aws-code-deploy@x.y
-# version: 2.1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# orbs: # specify all orbs you want to use.
+#   aws-code-deploy: circleci/aws-code-deploy@1.0.0
+# version: 2.1 # We must use 2.1 to make use of orbs.
 # workflows:
-#   deploy_application:
+# #   version: 2.1
+#   build-deploy-workflow:
 #     jobs:
-#       - aws-code-deploy/deploy:
-#           application-name: cy235-cicd-app # The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.
-#           deployment-group: cy235-cicd-app-group # The name of a new deployment group for the specified application.
-#           service-role-arn: arn:aws:iam::110693898349:role/CodeDeployServiceRole # The service role for a deployment group.
-#           bundle-bucket: cy235-cicd-bucket # The s3 bucket where an application revision will be stored.
-#           bundle-key: app # A key under the s3 bucket where an application revision will be stored.   
+#       - build
+#       - deliver:
+#           requires:
+#             - build
+# #             - deploy_application:
+# #               requires:
+# #                 - deliver:
+# #                 application-name: cy235-cicd-app # The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.
+# #                 deployment-group: cy235-cicd-app-group # The name of a new deployment group for the specified application.
+# #                 service-role-arn: arn:aws:iam::110693898349:role/CodeDeployServiceRole # The service role for a deployment group.
+# #                 bundle-bucket: cy235-cicd-bucket # The s3 bucket where an application revision will be stored.
+# #                 bundle-key: app # 
+            
+# #       - deploy_application:
+# #           requires:
+# #             - deliver
+# # #           filters:
+# # #             branches:
+# # #               only: master
+# # #                 - master, qa
 
-jobs:
-
-  build:
-    working_directory: ~/app
-    docker:
-      - image: circleci/python:3.7.3-stretch
 
 
-    steps:
-      - checkout
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "requirements.txt" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-      - run:
-          name: Create virtual env
-          command: make setup
-      - run:
-          name: Install packages
-          command: make install
-      - run:
-          name: Install hadolint
-          command: | 
-            sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
-            sudo chmod +x /bin/hadolint
-      
-      # save build dependencies for next jobs
-      - save_cache:
-          name: "Save build dependencies"
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
-          paths:
-            - ./devops
-      
-      - run:
-          name: run lint
-          command: |
-            make lint
+# # orbs:
+# #   aws-code-deploy: circleci/aws-code-deploy@x.y
+# # version: 2.1
+# # workflows:
+# #   deploy_application:
+# #     jobs:
+# #       - aws-code-deploy/deploy:
+# #           application-name: cy235-cicd-app # The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.
+# #           deployment-group: cy235-cicd-app-group # The name of a new deployment group for the specified application.
+# #           service-role-arn: arn:aws:iam::110693898349:role/CodeDeployServiceRole # The service role for a deployment group.
+# #           bundle-bucket: cy235-cicd-bucket # The s3 bucket where an application revision will be stored.
+# #           bundle-key: app # A key under the s3 bucket where an application revision will be stored.   
 
-      - run:
-          name: run test
-          command: |
-            make test
+# jobs:
 
-  deliver:
-    working_directory: ~/app
-    docker:
-      - image: circleci/python:3.7.3-stretch
-    steps:
-      - checkout
-      - restore_cache:
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
+#   build:
+#     working_directory: ~/app
+#     docker:
+#       - image: circleci/python:3.7.3-stretch
+
+
+#     steps:
+#       - checkout
+#       # Download and cache dependencies
+#       - restore_cache:
+#           keys:
+#           - v1-dependencies-{{ checksum "requirements.txt" }}
+#           # fallback to using the latest cache if no exact match is found
+#           - v1-dependencies-
 #       - run:
-#           name: Show current branch
-#           command: echo ${CIRCLE_BRANCH}
-      - run:
-          name: Show git commit id
-          command: echo ${CIRCLE_SHA1}
-      - run: sudo apt-get update
-      - run: sudo apt-get install python3-pip
-#       - run: sudo apt-get install groff
-      - run: sudo pip3 install --upgrade pip
-      - run:
-          name: Install aws cli
-          command: pip3 install awscli --upgrade --user
-      - run: ~/.local/bin/aws --version
-      - run: chmod +x ~/.local/bin/aws
+#           name: Create virtual env
+#           command: make setup
+#       - run:
+#           name: Install packages
+#           command: make install
+#       - run:
+#           name: Install hadolint
+#           command: | 
+#             sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
+#             sudo chmod +x /bin/hadolint
       
+#       # save build dependencies for next jobs
+#       - save_cache:
+#           name: "Save build dependencies"
+#           key: v1-dependencies-{{ checksum "requirements.txt" }}
+#           paths:
+#             - ./devops
       
-                
 #       - run:
 #           name: run lint
 #           command: |
 #             make lint
+
 #       - run:
 #           name: run test
 #           command: |
 #             make test
-      
-      
-      
-      - run:
-          name: "Set AWS region"
-          command: ~/.local/bin/aws configure set region us-east-1   
-      - run:
-          name: Deploy to S3
-          command: |
-           if [ "${CIRCLE_BRANCH}" == "qa" ]; then
-              ~/.local/bin/aws s3 sync /home/circleci/app/ s3://cy235-cicd-bucket/qa --delete
-           elif [ "${CIRCLE_BRANCH}" == "master" ]; then
-                ~/.local/bin/aws s3 sync /home/circleci/app s3://cy235-cicd-bucket/app --delete
-           fi
-           
-#   deploy_application:
-# #     jobs:
-#     - aws-code-deploy/deploy:
-#         application-name: cy235-cicd-app # The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.
-#         deployment-group: cy235-cicd-app-group # The name of a new deployment group for the specified application.
-#         service-role-arn: arn:aws:iam::110693898349:role/CodeDeployServiceRole # The service role for a deployment group.
-#         bundle-bucket: cy235-cicd-bucket # The s3 bucket where an application revision will be stored.
-#         bundle-key: app # A key under the s3 bucket where an application revision will be stored.           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
-           
+
+#   deliver:
+#     working_directory: ~/app
+#     docker:
+#       - image: circleci/python:3.7.3-stretch
+#     steps:
+#       - checkout
+#       - restore_cache:
+#           key: v1-dependencies-{{ checksum "requirements.txt" }}
 # #       - run:
-# #           name: AWS codedeploy
+# #           name: Show current branch
+# #           command: echo ${CIRCLE_BRANCH}
+#       - run:
+#           name: Show git commit id
+#           command: echo ${CIRCLE_SHA1}
+#       - run: sudo apt-get update
+#       - run: sudo apt-get install python3-pip
+# #       - run: sudo apt-get install groff
+#       - run: sudo pip3 install --upgrade pip
+#       - run:
+#           name: Install aws cli
+#           command: pip3 install awscli --upgrade --user
+#       - run: ~/.local/bin/aws --version
+#       - run: chmod +x ~/.local/bin/aws
+      
+      
+                
+# #       - run:
+# #           name: run lint
 # #           command: |
-# #            if [ "${CIRCLE_BRANCH}" == "qa" ]; then
-# #                ~/.local/bin/aws deploy create-deployment --application-name app-qa --deployment-group-name app-group-qa --file-exists-behavior OVERWRITE --github-location repository="TaikerLiang/APP",commitId="$CIRCLE_SHA1"
-# #            elif [ "${CIRCLE_BRANCH}" == "master" ]; then
-# #                 ~/.local/bin/aws deploy create-deployment --application-name CD-app --deployment-group-name CD-group --file-exists-behavior OVERWRITE --github-location repository="cy235/CICD_ML_AWS",commitId="$CIRCLE_SHA1"
-# #            fi
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-# #   deploy:
-# #     working_directory: ~/cicd
-# #     docker:
-# #       - image: circleci/python:3.7.3-stretch
-# #     steps:
-# #       - checkout
-# #       - restore_cache:
-# #           key: v1-dependencies-{{ checksum "requirements.txt" }}
+# #             make lint
+# #       - run:
+# #           name: run test
+# #           command: |
+# #             make test
+      
+      
+      
+#       - run:
+#           name: "Set AWS region"
+#           command: ~/.local/bin/aws configure set region us-east-1   
+#       - run:
+#           name: Deploy to S3
+#           command: |
+#            if [ "${CIRCLE_BRANCH}" == "qa" ]; then
+#               ~/.local/bin/aws s3 sync /home/circleci/app/ s3://cy235-cicd-bucket/qa --delete
+#            elif [ "${CIRCLE_BRANCH}" == "master" ]; then
+#                 ~/.local/bin/aws s3 sync /home/circleci/app s3://cy235-cicd-bucket/app --delete
+#            fi
+           
+# #   deploy_application:
+# # #     jobs:
+# #     - aws-code-deploy/deploy:
+# #         application-name: cy235-cicd-app # The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.
+# #         deployment-group: cy235-cicd-app-group # The name of a new deployment group for the specified application.
+# #         service-role-arn: arn:aws:iam::110693898349:role/CodeDeployServiceRole # The service role for a deployment group.
+# #         bundle-bucket: cy235-cicd-bucket # The s3 bucket where an application revision will be stored.
+# #         bundle-key: app # A key under the s3 bucket where an application revision will be stored.           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
+           
 # # #       - run:
-# # #           name: Show current branch
-# # #           command: echo ${CIRCLE_BRANCH}
-# #       - run:
-# #           name: Show git commit id
-# #           command: echo ${CIRCLE_SHA1}
-# #       - run: sudo apt-get update
-# #       - run: sudo apt-get install python3-pip
-# # #       - run: sudo apt-get install groff
-# #       - run: sudo pip3 install --upgrade pip
-# #       - run:
-# #           name: Install aws cli
-# #           command: pip3 install awscli --upgrade --user
-# #       - run: ~/.local/bin/aws --version
-# #       - run: chmod +x ~/.local/bin/aws
-# #       - run:
-# #           name: "Set AWS region"
-# #           command: ~/.local/bin/aws configure set region us-east-1
-# #       - run:
-# #           name: Deploy to S3
-# #           command: |
+# # #           name: AWS codedeploy
+# # #           command: |
 # # #            if [ "${CIRCLE_BRANCH}" == "qa" ]; then
-# #  #               ~/.local/bin/aws s3 sync /home/circleci/cicd/ s3://app/qa --delete
-# #   #          elif [ "${CIRCLE_BRANCH}" == "master" ]; then
-# #                 ~/.local/bin/aws s3 sync /home/circleci/cicd/ s3://cicd/master --delete
-# #    #         fi
-# #       - run:
-# #           name: AWS codedeploy
-# #           command: |
-# #           #  if [ "${CIRCLE_BRANCH}" == "qa" ]; then
-# #            #     ~/.local/bin/aws deploy create-deployment --application-name app-qa --deployment-group-name app-group-qa --file-exists-behavior OVERWRITE --github-location repository="TaikerLiang/APP",commitId="$CIRCLE_SHA1"
-# #            # elif [ "${CIRCLE_BRANCH}" == "master" ]; then
-# #                 ~/.local/bin/aws deploy create-deployment --application-name cicd --deployment-group-name cicd-group --file-exists-behavior OVERWRITE --github-location repository="cy235/CICD_ML_AWS",commitId="$CIRCLE_SHA1"
-# #            # fi
+# # #                ~/.local/bin/aws deploy create-deployment --application-name app-qa --deployment-group-name app-group-qa --file-exists-behavior OVERWRITE --github-location repository="TaikerLiang/APP",commitId="$CIRCLE_SHA1"
+# # #            elif [ "${CIRCLE_BRANCH}" == "master" ]; then
+# # #                 ~/.local/bin/aws deploy create-deployment --application-name CD-app --deployment-group-name CD-group --file-exists-behavior OVERWRITE --github-location repository="cy235/CICD_ML_AWS",commitId="$CIRCLE_SHA1"
+# # #            fi
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+# # #   deploy:
+# # #     working_directory: ~/cicd
+# # #     docker:
+# # #       - image: circleci/python:3.7.3-stretch
+# # #     steps:
+# # #       - checkout
+# # #       - restore_cache:
+# # #           key: v1-dependencies-{{ checksum "requirements.txt" }}
+# # # #       - run:
+# # # #           name: Show current branch
+# # # #           command: echo ${CIRCLE_BRANCH}
+# # #       - run:
+# # #           name: Show git commit id
+# # #           command: echo ${CIRCLE_SHA1}
+# # #       - run: sudo apt-get update
+# # #       - run: sudo apt-get install python3-pip
+# # # #       - run: sudo apt-get install groff
+# # #       - run: sudo pip3 install --upgrade pip
+# # #       - run:
+# # #           name: Install aws cli
+# # #           command: pip3 install awscli --upgrade --user
+# # #       - run: ~/.local/bin/aws --version
+# # #       - run: chmod +x ~/.local/bin/aws
+# # #       - run:
+# # #           name: "Set AWS region"
+# # #           command: ~/.local/bin/aws configure set region us-east-1
+# # #       - run:
+# # #           name: Deploy to S3
+# # #           command: |
+# # # #            if [ "${CIRCLE_BRANCH}" == "qa" ]; then
+# # #  #               ~/.local/bin/aws s3 sync /home/circleci/cicd/ s3://app/qa --delete
+# # #   #          elif [ "${CIRCLE_BRANCH}" == "master" ]; then
+# # #                 ~/.local/bin/aws s3 sync /home/circleci/cicd/ s3://cicd/master --delete
+# # #    #         fi
+# # #       - run:
+# # #           name: AWS codedeploy
+# # #           command: |
+# # #           #  if [ "${CIRCLE_BRANCH}" == "qa" ]; then
+# # #            #     ~/.local/bin/aws deploy create-deployment --application-name app-qa --deployment-group-name app-group-qa --file-exists-behavior OVERWRITE --github-location repository="TaikerLiang/APP",commitId="$CIRCLE_SHA1"
+# # #            # elif [ "${CIRCLE_BRANCH}" == "master" ]; then
+# # #                 ~/.local/bin/aws deploy create-deployment --application-name cicd --deployment-group-name cicd-group --file-exists-behavior OVERWRITE --github-location repository="cy235/CICD_ML_AWS",commitId="$CIRCLE_SHA1"
+# # #            # fi
             
-# #   #Build docker image and push to dockerhub
-# #   build_docker:
-# #     docker:
-# #       - image: circleci/python:3.7.3-stretch
+# # #   #Build docker image and push to dockerhub
+# # #   build_docker:
+# # #     docker:
+# # #       - image: circleci/python:3.7.3-stretch
 
-# #     working_directory: ~/repo
+# # #     working_directory: ~/repo
 
-# #     steps:
-# #       - checkout
-# #       - setup_remote_docker:
-# #           docker_layer_caching: true
+# # #     steps:
+# # #       - checkout
+# # #       - setup_remote_docker:
+# # #           docker_layer_caching: true
 
-# #         # Download and cache dependencies
-# #       - restore_cache:
-# #           keys:
-# #           - v1-dependencies-{{ checksum "requirements.txt" }}
-# #           # fallback to using the latest cache if no exact match is found
-# #           - v1-dependencies-
+# # #         # Download and cache dependencies
+# # #       - restore_cache:
+# # #           keys:
+# # #           - v1-dependencies-{{ checksum "requirements.txt" }}
+# # #           # fallback to using the latest cache if no exact match is found
+# # #           - v1-dependencies-
 
-# #       # Build dockerfile
-# #       - run:
-# #           name: Setup env
-# #           command: |
-# #                 if [ -n "$CIRCLE_TAG" ]; then
-# #                     echo 'export DTAG=$CIRCLE_TAG' >> $BASH_ENV
-# #                 else
-# #                     echo 'export DTAG=${CIRCLE_BRANCH}_latest' >> $BASH_ENV
-# #                 fi
+# # #       # Build dockerfile
+# # #       - run:
+# # #           name: Setup env
+# # #           command: |
+# # #                 if [ -n "$CIRCLE_TAG" ]; then
+# # #                     echo 'export DTAG=$CIRCLE_TAG' >> $BASH_ENV
+# # #                 else
+# # #                     echo 'export DTAG=${CIRCLE_BRANCH}_latest' >> $BASH_ENV
+# # #                 fi
 
-# #       # Build Docker image
-# #       - run:
-# #           name: docker login
-# #           command: echo "$DOCKER_PASSWORD" | docker login -u cy235 --password-stdin
-# #       - run:
-# #           name: Build Docker image
-# #           command: docker build --tag cy235/cy235-prediction:$DTAG .
+# # #       # Build Docker image
+# # #       - run:
+# # #           name: docker login
+# # #           command: echo "$DOCKER_PASSWORD" | docker login -u cy235 --password-stdin
+# # #       - run:
+# # #           name: Build Docker image
+# # #           command: docker build --tag cy235/cy235-prediction:$DTAG .
 
-# #       # Push Docker image
-# #       - run:
-# #           name: Push to DockerHub
-# #           command: |
-# #                 docker push cy235/cy235-prediction:$DTAG
+# # #       # Push Docker image
+# # #       - run:
+# # #           name: Push to DockerHub
+# # #           command: |
+# # #                 docker push cy235/cy235-prediction:$DTAG
