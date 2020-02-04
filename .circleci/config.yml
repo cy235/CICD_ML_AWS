@@ -3,7 +3,7 @@
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
 
-version: 2.1 # We must use 2.1 to make use of orbs.
+# version: 2.1 # We must use 2.1 to make use of orbs.
 # orbs: # specify all orbs you want to use.
 #   aws-code-deploy: circleci/aws-code-deploy@1.0.0
 
