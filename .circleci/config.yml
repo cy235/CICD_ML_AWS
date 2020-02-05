@@ -183,7 +183,7 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "qa" ]; then
                 ~/.local/bin/aws deploy create-deployment --application-name app-qa --deployment-group-name app-group-qa --file-exists-behavior OVERWRITE --github-location repository="TaikerLiang/APP",commitId="$CIRCLE_SHA1"
             elif [ "${CIRCLE_BRANCH}" == "master" ]; then
-                ~/.local/bin/aws deploy create-deployment --application-name cy235-cicd-app --deployment-group-name cy235-cicd-app-group --file-exists-behavior OVERWRITE --github-location repository="cy235/CICD_ML_AWS",commitId="$CIRCLE_SHA1"
+                ~/.local/bin/aws deploy create-deployment --application-name cicd-app --deployment-group-name cicd-app-group --file-exists-behavior OVERWRITE --github-location repository="cy235/CICD_ML_AWS",commitId="$CIRCLE_SHA1"
             fi
 
             
