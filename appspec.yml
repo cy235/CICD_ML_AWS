@@ -1,8 +1,8 @@
 version: 0.0
-os: linux
+os: ubuntu
 files:
   - source: /
-    destination: /var/www/app
+    destination: /home/ubuntu/cy235-app
 hooks:
   AfterInstall:
     - location: scripts/after-install.sh
