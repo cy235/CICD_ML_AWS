@@ -6,7 +6,7 @@
 
 version: 2.1 
 workflows:
-  build-deploy-workflow:
+  build-deliver-workflow:
     jobs:
       - build
       - deliver:
