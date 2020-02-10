@@ -67,7 +67,7 @@ First, sign up your CircleCI with github account, then add your project in githu
 In the root path your github project, there should be a file named `config.yml` in a hidden folder named `.circleci`. whenever there is a commit in your project in github, `config.yml` is responsible for executing building and testing module and pushing the successful built ML model into AWS S3 bucket. Also, there should be another file named `appspec.yml`, which is responsible for deploying the ML application from the AWS S3 bucket into the target (thoese installed with CodeDeploy agent) EC2 instances. 
 
 
-
+## Run CI/CD pipeline
 
 
 
