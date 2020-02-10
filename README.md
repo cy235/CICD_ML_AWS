@@ -39,7 +39,7 @@ The steps of creating the AWS EC2 instances with HashiCorp Terraform can be refe
 }
 ```
 
-In addtion, we need to install the required tools and packages for each EC2 instance by executing the following commmand lines:
+In addtion, we need to install the required tools, packages and especially CodeDeploy agent for each EC2 instance by executing the following commmand lines:
 
 ```
 #!/bin/bash 
@@ -58,7 +58,12 @@ sudo service codedeploy-agent status
 ```
 
 Notice that the operating system of our employed EC2 instances is free tier Ubuntu Server 16.04 LTS (HVM), you can also select your prefered server but remember change the above command lines accordingly.
-## 
+
+## Setup CI/CD tools
+In this project, we employ the CircleCI for continuously builing/testing the ML model application because CircleCI is free and it runs fast due to its intrinsinc caching mechanism. While for continunous deployment part, since the CircleCI is not able to deploy the ML model application into AWS VPC directly, we need to leverage the AWS CodeDeploy to do this job.
+
+First, sign up your CircleCI with github account, then add your project in github to CircleCI, and enter your AWS access ID and secret access ID in in `AWS permission` 
+
 
 
 
