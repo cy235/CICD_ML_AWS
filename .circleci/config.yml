@@ -91,21 +91,27 @@ jobs:
           command: ~/.local/bin/aws configure set region us-east-1   
       - run:
           name: Deploy to S3
-          command: |
-           if [ "${CIRCLE_BRANCH}" == "qa" ]; then
-              ~/.local/bin/aws s3 sync /home/circleci/app/ s3://cy235-cicd-bucket/qa --delete
-           elif [ "${CIRCLE_BRANCH}" == "master" ]; then
-                ~/.local/bin/aws s3 sync /home/circleci/app s3://cy235-cicd-bucket/app --delete
-           fi
+#           command: |
+#            if [ "${CIRCLE_BRANCH}" == "qa" ]; then
+#               ~/.local/bin/aws s3 sync /home/circleci/app/ s3://cy235-cicd-bucket/qa --delete
+#            elif [ "${CIRCLE_BRANCH}" == "master" ]; then
+#                 ~/.local/bin/aws s3 sync /home/circleci/app s3://cy235-cicd-bucket/app --delete
+#            fi
+          command:
+            ~/.local/bin/aws s3 sync /home/circleci/app s3://cy235-cicd-bucket/app --delete
+
            
       - run:
           name: AWS codedeploy
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "qa" ]; then
-                ~/.local/bin/aws deploy create-deployment --application-name app-qa --deployment-group-name app-group-qa --file-exists-behavior OVERWRITE --github-location repository="TaikerLiang/APP",commitId="$CIRCLE_SHA1"
-            elif [ "${CIRCLE_BRANCH}" == "master" ]; then
-                ~/.local/bin/aws deploy create-deployment --application-name cicd-app --deployment-group-name cicd-app-group --file-exists-behavior OVERWRITE --github-location repository="cy235/CICD_ML_AWS",commitId="$CIRCLE_SHA1"
-            fi
+#           command: |
+#             if [ "${CIRCLE_BRANCH}" == "qa" ]; then
+#                 ~/.local/bin/aws deploy create-deployment --application-name app-qa --deployment-group-name app-group-qa --file-exists-behavior OVERWRITE --github-location repository="TaikerLiang/APP",commitId="$CIRCLE_SHA1"
+#             elif [ "${CIRCLE_BRANCH}" == "master" ]; then
+#                 ~/.local/bin/aws deploy create-deployment --application-name cicd-app --deployment-group-name cicd-app-group --file-exists-behavior OVERWRITE --github-location repository="cy235/CICD_ML_AWS",commitId="$CIRCLE_SHA1"
+#             fi
+          command:
+            ~/.local/bin/aws deploy create-deployment --application-name cicd-app --deployment-group-name cicd-app-group --file-exists-behavior OVERWRITE --github-location repository="cy235/CICD_ML_AWS",commitId="$CIRCLE_SHA1"
+
 
                              
            
