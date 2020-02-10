@@ -64,7 +64,7 @@ In this project, we employ the CircleCI for continuously builing/testing the ML 
 
 First, sign up your CircleCI with github account, then add your project in github to CircleCI, and enter your AWS access ID and secret access ID in `AWS permission`.
 
-In the root path your github project, there should be one hidden folder named `.circleci`
+In the root path your github project, there should be a file named `config.yml` in a hidden folder named `.circleci`. whenever there is a commit in your project in github, `config.yml` is responsible for executing building and testing module. Also, there should be another file named ``
 
 
 
