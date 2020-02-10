@@ -62,7 +62,9 @@ Notice that the operating system of our employed EC2 instances is free tier Ubun
 ## Setup CI/CD tools
 In this project, we employ the CircleCI for continuously builing/testing the ML model application because CircleCI is free and it runs fast due to its intrinsinc caching mechanism. While for continunous deployment part, since the CircleCI is not able to deploy the ML model application into AWS VPC directly, we need to leverage the AWS CodeDeploy to do this job.
 
-First, sign up your CircleCI with github account, then add your project in github to CircleCI, and enter your AWS access ID and secret access ID in in `AWS permission` 
+First, sign up your CircleCI with github account, then add your project in github to CircleCI, and enter your AWS access ID and secret access ID in `AWS permission`.
+
+In the root path your github project, there should be one hidden folder named `.circleci`
 
 
 
