@@ -67,11 +67,21 @@ First, sign up your CircleCI with github account, then add your project in githu
 Second, logo into AWS, navigate to `codedeploy`. and create an application with your preferred name, and then create a deployment group with your preferred group name. Select service role as `CodeDeployServiceRole` we created before, select deployment type as Blue/green, select manually provision instances in environment configuration, and Amazon EC2 instances, and group tags for the target deployment EC2 instance. You also need to create a classic load balancer in EC2 dashboard (left side) to redirect the traffic for blue/green deployment strategy. Remember changing the protocol and port of load balancer into `TCP` and `22` respectively since we want to access to the EC2 via the SSH terminal. In deployment settings, select `Keep the original instances in the deployment group running` since we want keep the original/blue instance for roll back if errors happen in the new/green replacement instance.  Also, there should be another file named `appspec.yml` in the root path of your github project, which is responsible for deploying the ML application from the AWS S3 bucket into the target (those installed with CodeDeploy agent) EC2 instances. 
 
 ## CI/CD pipeline
-In the continuous integration part, some test modules such as python source code test as well as docker image test are added, you can refer more details in `config.yml`, where all the steps in the continuous integration are executed in terms of work flow. If the build is successful, move to the next stage to deliver the ML model application into AWS S3 bucket, otherwise, a failure notification will be sent to your email associated with your github account. You can also refer more details about the continuous integration in the CircleCI dashboard.
+In the continuous integration part, some test modules such as python source code test as well as docker image test are added, you can refer more details in `appspec.yml`, where all the steps in the continuous integration are executed in terms of work flow. If the build is successful, move to the next stage to deliver the ML model application into AWS S3 bucket, otherwise, a failure notification will be sent to your email associated with your github account. You can also refer more details about the continuous integration in the CircleCI dashboard.
 
 In the continuous deployment part, AWS CodeDeploy will be triggered whenever there is a new update in AWS S3 bucket. You can check the deployment process in CodeDeploy dashboard. Also, you can see the instance under the load balancer will be redirect from the original/blue one to replacement/green one.
 
-Finally, when the ML model is successfully deployed, we can access 
+Finally, when the ML model is successfully deployed, access the server via load balancer from SSH terminal, then go to the application file (you have created in the building process and then deployed into S3 bucket and finally deployed in the EC2), put a request by executing `sh make_prediction.sh`, we can get the prediction result.
+
+
+
+
+
+
+
+
+
+
 
 
 
