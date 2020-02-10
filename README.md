@@ -38,7 +38,7 @@ The steps of creating the AWS EC2 instances with HashiCorp Terraform can be refe
     ]
 }
 ```
-
+Also, create a service role named `CodeDeployServiceRole` which attachs AWS managed policy `AWSCodeDeployRole` for later use.
 In addtion, we need to install the required tools, packages and especially CodeDeploy agent for each EC2 instance by executing the following commmand lines:
 
 ```
@@ -62,12 +62,15 @@ Notice that the operating system of our employed EC2 instances is free tier Ubun
 ## Setup CI/CD tools
 In this project, we employ the CircleCI for continuously builing/testing the ML model application because CircleCI is free and it runs fast due to its intrinsinc caching mechanism. While for continunous deployment part, since the CircleCI is not able to deploy the ML model application into AWS VPC directly, we need to leverage the AWS CodeDeploy to do this job.
 
-First, sign up your CircleCI with github account, then add your project in github to CircleCI, and enter your AWS access ID and secret access ID in `AWS permission`.
+First, sign up your CircleCI with github account, then add your project in github to CircleCI, and enter your AWS access ID and secret access ID in `AWS permission`. In the root path your github project, there should be a file named `config.yml` in a hidden folder named `.circleci`. whenever there is a commit in your project in github, `config.yml` is responsible for executing building and testing module and pushing the successful built ML model into AWS S3 bucket. 
 
-In the root path your github project, there should be a file named `config.yml` in a hidden folder named `.circleci`. whenever there is a commit in your project in github, `config.yml` is responsible for executing building and testing module and pushing the successful built ML model into AWS S3 bucket. Also, there should be another file named `appspec.yml`, which is responsible for deploying the ML application from the AWS S3 bucket into the target (thoese installed with CodeDeploy agent) EC2 instances. 
+logo into AWS, navigate to `codedeploy`. create an application with your preferred name, and then create a deployment group. Create your deployment group name, select service role as `CodeDeployServiceRole`, select deployment tyle as Blue/green, select manually provision instances in environment configuration, and Amazon EC2 instances, and group tags for the target deployment EC2 instance. You also need to creat a load balancer in EC2 dashboard, to redirect the traffic for blue/green deployment strategy.
+Also, there should be another file named `appspec.yml`, which is responsible for deploying the ML application from the AWS S3 bucket into the target (thoese installed with CodeDeploy agent) EC2 instances. 
 
+## CI/CD pipeline
+In the continuous integration part, some test modules such as python source code test as well as docker image test are added, you can refer more details in `appspec.yml`, where all the steps in the continuous integration are executed in terms of work flow. If the build is successful, move to the next stage to deliver the ML model application into AWS S3 bucket, otherwise, a failure notification will be sent to your email asscociated with your github account. You can also refer more details about the continuou integration in the CircleCI dashboard.
 
-## Run CI/CD pipeline
+In the continuous deployment part, AWS CodeDeploy will be triggered whenever there is a new update in AWS S3 bucket, here 
 
 
 
