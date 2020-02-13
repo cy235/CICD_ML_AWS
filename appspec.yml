@@ -6,7 +6,7 @@ files:
 hooks:
   AfterInstall:
     - location: scripts/after-install.sh
-      runas: root
+      runas: ubuntu
       timeout: 300
 # #   ApplicationStart:
 # #     - location: scripts/restart.sh
