@@ -3,10 +3,10 @@ os: linux
 files:
   - source: /
     destination: /home/ubuntu/cy235-app
-hooks:
-  AfterInstall:
-    - location: scripts/after-install.sh
-      runas: ubuntu
+# hooks:
+#   AfterInstall:
+#     - location: scripts/after-install.sh
+#       runas: ubuntu
       timeout: 300
 # #   ApplicationStart:
 # #     - location: scripts/restart.sh
