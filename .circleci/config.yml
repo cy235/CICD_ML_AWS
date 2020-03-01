@@ -88,7 +88,7 @@ jobs:
       
       - run:
           name: "Set AWS region"
-          command: ~/.local/bin/aws configure set region us-east-1   
+          command: ~/.local/bin/aws configure set region us-est-1   
       - run:
           name: Deploy to S3
 #           command: |
