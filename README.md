@@ -72,6 +72,7 @@ In the continuous integration part, some test modules such as python source code
 
 In the continuous deployment part, AWS CodeDeploy will be triggered whenever there is a new update in AWS S3 bucket. You can check the deployment process in CodeDeploy dashboard. Also, you can see the instance under the load balancer will be redirect from the original/blue one to replacement/green one.
 
+## Access ML model service
 Finally, when the ML model is successfully deployed, access the server via load balancer from SSH terminal, then go to the application file (you have created in the building process and then deployed into S3 bucket and finally deployed in the EC2), run 
 ```
 sh run_docker.sh
