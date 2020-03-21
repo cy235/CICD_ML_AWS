@@ -73,7 +73,7 @@ In the continuous deployment part, AWS CodeDeploy will be triggered whenever the
 
 Finally, when the ML model is successfully deployed, access the server via load balancer from SSH terminal, then go to the application file (you have created in the building process and then deployed into S3 bucket and finally deployed in the EC2), run 
 ```
-sh docker_run.sh
+sh run_docker.sh
 ```
 open another terminal, put a request by executing 
 ```
